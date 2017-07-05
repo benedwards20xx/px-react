@@ -2,9 +2,6 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './PX.css';
 
-// const numCols;
-// const numRows;
-
 function Square(props) {
   return (
     <button className="square" onClick={props.onClick}>
@@ -16,34 +13,43 @@ function Square(props) {
 class Board extends React.Component {
   constructor() {
     super();
-    this.props = {
+    this.state = {
       numCols: 3,
       numRows: 3,
+      squares: Array(this.numCols).fill(Array(this.numRows).fill(0)),
     };
   }
 
   renderSquare(col,row) {
+    console.log(col + "," + row);
     return <Square
-      value={this.props.squares[row][col]}
+      value={this.state.squares[row][col]}
       onClick={() => this.props.onClick(col,row)}
     />;
   }
 
   renderRow(row) {
+    // console.log('renderRow');
+    // console.log(row);
     let cols = [];
-    for (let col = 0; col < this.props.numCols; col++) {
+    for (let col = 0; col < this.state.numCols; col++) {
       // cols.push({this.renderSquare(col,row)});
-      cols.push(<Square/>);
+      // console.log(col);
+      // cols.push(<Square/>);
+      this.renderSquare(col,row)
     }
-    return (
-      {cols}
-    );
+    // return (
+    //   {cols}
+    // );
   }
 
   render() {
     let rows = [];
-    for (let i = 0; i < this.pops.numRows; i++) {
-      rows.push(<div className="board-row">{this.renderRow()}</div>);
+    // console.log("hmm");
+    // console.log(this.state);
+    for (let row = 0; row < this.state.numRows; row++) {
+      // console.log(row);
+      rows.push(<div className="board-row">{this.renderRow(row)}</div>);
     }
     return (
       <div>
@@ -70,9 +76,10 @@ class PX extends React.Component {
     this.state = {
       numCols: 3,
       numRows: 3,
-      history: [{
-        squares: Array(this.numCols).fill(Array(this.numRows).fill(null)),
-      }],
+      squares: Array(this.numCols).fill(Array(this.numRows).fill(0)),
+      // history: [{
+      //   squares: Array(this.numCols).fill(Array(this.numRows).fill(null)),
+      // }],
       stepNumber: 0,
       canPlay: true,
       numErrors: 0,
@@ -82,21 +89,32 @@ class PX extends React.Component {
   }
 
   handleClick(i,j) {
-    // console.log('a');
     // const history = this.state.history.slice(0, this.state.stepNumber + 1);
-    const history = this.state.history;
-    const current = history[history.length - 1];
-    const squares = current.squares.slice();
+    // const history = this.state.history;
+    // const current = history[history.length - 1];
+    const squares = this.state.squares;
+
+    console.log("squares.length");
+    console.log(squares.length);
+    for (let i = 0; i < squares.length; i++) {
+      for(let j = 0; j < squares[i].length; j++) {
+        console.log(i + ", " + j);
+        // console.log(solution[i][j]);
+        console.log(squares[i][j]);
+      }
+    }
+
     // const squares = Array(this.state.numRows).fill(Array(this.state.numCols).fill(null))
     if (isGameOver(squares) || squares[i]) {
       return;
     }
     squares[i] = this.state.clickable ? 'X' : '';
     this.setState({
-      history: history.concat([{
-        squares: squares
-      }]),
-      stepNumber: history.length,
+      squares: squares,
+      // history: history.concat([{
+      //   squares: squares
+      // }]),
+      // stepNumber: history.length,
       // numErrors: if(
       //   // TODO: errorOccured()
       //   false,
@@ -124,9 +142,9 @@ class PX extends React.Component {
   }
 
   render() {
-    const history = this.state.history;
-    const current = history[this.state.stepNumber];
-    const winner = isGameOver(this.history.squares);
+    // const history = this.state.history;
+    // const current = history[this.state.stepNumber];
+    const winner = isGameOver(this.state.squares);
 
     // const moves = history.map((step, move) => {
     //   const desc = move ?
@@ -151,7 +169,7 @@ class PX extends React.Component {
       <div className="game">
         <div className="game-board">
           <Board
-            squares={current.squares}
+            squares={this.state.squares}
             onClick={(i,j) => this.handleClick(i,j)}
           />
         </div>
@@ -180,8 +198,11 @@ function isGameOver(squares) {
   ];
   for (let i = 0; i < solution.length; i++) {
     for(let j = 0; j < solution[i].length; j++) {
-      if(squares[i][j] !== solution[i][j])
-        return false;
+      // console.log(i + ", " + j);
+      // console.log(solution[i][j]);
+      // console.log(squares[i][j]);
+      // if(squares[i][j] !== solution[i][j])
+      //   return false;
     }
     // if(squares[i] != solution [i])
     //   return false;
