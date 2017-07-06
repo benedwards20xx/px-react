@@ -4,8 +4,7 @@ import './PX.css';
 
 function Square(props) {
   return (
-    <button className="square" onClick={props.onClick}>
-      {props.value}
+    <button className="square">
     </button>
   );
 }
@@ -16,15 +15,14 @@ class Board extends React.Component {
     this.state = {
       numCols: 3,
       numRows: 3,
-      squares: Array(3).fill(Array(3).fill(0)),
+      squares: Array(this.numCols).fill(Array(this.numRows).fill(null)),
       // squares: Array(this.numCols).fill(null);
     };
   }
 
-  // renderSquare(col,row) {
-  renderSquare() {
+  renderSquare(col,row) {
     return <Square
-      // value={this.state.squares[row][col]}
+      value={this.state.squares[row][col]}
       // onClick={() => this.props.onClick(col,row)}
     />;
   }
@@ -34,86 +32,23 @@ class Board extends React.Component {
       <div>
         {
           this.state.squares.map(function(col) {
-            console.log('col: ' + col);
-            var rows = col.map(function(row) {
-              // renderSquare()
-              console.log('row: ' + row);
-              return (
-                <Square />
-              )
-            });
+              var rows = col.map(function(row) {
+                  return (
+                      renderSquare(col,row);
+                  )
+              });
 
-            return (
-              <div>
-                {rows}
-              </div>
-            )
+              return (
+                  <tr>
+                      {rows}
+                  </tr>
+              )
           })
         }
       </div>
     );
   }
 }
-
-// class Board extends React.Component {
-//   constructor() {
-//     super();
-//     this.state = {
-//       numCols: 3,
-//       numRows: 3,
-//       squares: Array(this.numCols).fill(Array(this.numRows).fill(0)),
-//     };
-//   }
-
-//   renderSquare(col,row) {
-//     console.log(col + "," + row);
-//     return <Square
-//       value={this.state.squares[row][col]}
-//       onClick={() => this.props.onClick(col,row)}
-//     />;
-//   }
-
-//   renderRow(row) {
-//     // console.log('renderRow');
-//     // console.log(row);
-//     let cols = [];
-//     for (let col = 0; col < this.state.numCols; col++) {
-//       // cols.push({this.renderSquare(col,row)});
-//       // console.log(col);
-//       // cols.push(<Square/>);
-//       this.renderSquare(col,row)
-//     }
-//     // return (
-//     //   {cols}
-//     // );
-//   }
-
-//   render() {
-//     let rows = [];
-//     // console.log("hmm");
-//     // console.log(this.state);
-//     for (let row = 0; row < this.state.numRows; row++) {
-//       // console.log(row);
-//       rows.push(<div className="board-row">{this.renderRow(row)}</div>);
-//     }
-//     return (
-//       <div>
-//         {rows}
-//       </div>
-//         // <div className="board-row">
-//         //   {this.renderSquare(1,0)}
-//         //   {this.renderSquare(1,1)}
-//         //   {this.renderSquare(1,2)}
-//         // </div>
-//         // <div className="board-row">
-//         //   {this.renderSquare(2,0)}
-//         //   {this.renderSquare(2,1)}
-//         //   {this.renderSquare(2,2)}
-//         // </div>
-//       //</div>
-//     );
-//   }
-// }
 
 class PX extends React.Component {
   constructor() {
@@ -226,8 +161,6 @@ class PX extends React.Component {
   }
 }
 
-// ========================================
-
 ReactDOM.render(
   <PX />,
   document.getElementById('root')
@@ -253,24 +186,4 @@ function isGameOver(squares) {
     //   return false;
   }
   return true;
-}
-
-function calculateWinner(squares) {
-  const lines = [
-    [0, 1, 2],
-    [3, 4, 5],
-    [6, 7, 8],
-    [0, 3, 6],
-    [1, 4, 7],
-    [2, 5, 8],
-    [0, 4, 8],
-    [2, 4, 6],
-  ];
-  for (let i = 0; i < lines.length; i++) {
-    const [a, b, c] = lines[i];
-    if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
-      return squares[a];
-    }
-  }
-  return null;
 }
