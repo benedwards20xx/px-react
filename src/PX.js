@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import './PX.css';
 
 function Square(props) {
+  // console.log(props);
   return (
     <button className="square" onClick={props.onClick}>
       {props.value}
@@ -16,7 +17,7 @@ class Board extends React.Component {
     this.state = {
       numCols: 3,
       numRows: 3,
-      squares: Array(3).fill(Array(3).fill(0)),
+      squares: Array(3).fill(Array(3).fill(null)),
       // squares: Array(this.numCols).fill(null);
     };
   }
@@ -33,13 +34,18 @@ class Board extends React.Component {
     return (
       <div>
         {
-          this.state.squares.map(function(col) {
-            console.log('col: ' + col);
-            var rows = col.map(function(row) {
+          this.state.squares.map(function(colList, col) {
+            // console.log('col: ' + col);
+            var rows = colList.map(function(rowList, row) {
               // renderSquare()
-              console.log('row: ' + row);
+              // console.log('row: ' + row);
               return (
-                <Square />
+                <Square
+                  col={col}
+                  row={row}
+                  value={rowList}
+                  onClick={}
+                />
               )
             });
 
@@ -52,6 +58,18 @@ class Board extends React.Component {
         }
       </div>
     );
+  }
+
+  handleClick() {
+    const squares = this.state.squares;
+
+    for (let i = 0; i < squares.length; i++) {
+      for(let j = 0; j < squares[i].length; j++) {
+        console.log(i + ", " + j);
+        // console.log(solution[i][j]);
+        console.log(squares[i][j]);
+      }
+    }
   }
 }
 
@@ -121,7 +139,7 @@ class PX extends React.Component {
     this.state = {
       numCols: 3,
       numRows: 3,
-      squares: Array(this.numCols).fill(Array(this.numRows).fill(0)),
+      squares: Array(this.numCols).fill(Array(this.numRows).fill(null)),
       // history: [{
       //   squares: Array(this.numCols).fill(Array(this.numRows).fill(null)),
       // }],
@@ -133,7 +151,7 @@ class PX extends React.Component {
     };
   }
 
-  handleClick(i,j) {
+  handleClick() {
     // const history = this.state.history.slice(0, this.state.stepNumber + 1);
     // const history = this.state.history;
     // const current = history[history.length - 1];
@@ -150,10 +168,11 @@ class PX extends React.Component {
     }
 
     // const squares = Array(this.state.numRows).fill(Array(this.state.numCols).fill(null))
-    if (isGameOver(squares) || squares[i]) {
+    // if (isGameOver(squares) || squares[i]) {
+    if (isGameOver(squares)) {
       return;
     }
-    squares[i] = this.state.clickable ? 'X' : '';
+    // squares = this.state.clickable ? 'X' : '';
     this.setState({
       squares: squares,
       // history: history.concat([{
